@@ -25,6 +25,7 @@ public class Menu extends JFrame {
         var startButton = new JButton("Start");
         setLabel = new JLabel("", SwingConstants.RIGHT);
         setLabel.setText("Set size of Maze: ");
+        var exitButton = new JButton("Quit");
 
         menuPanelNorth = new JPanel();
         menuPanelCenter = new JPanel();
@@ -37,6 +38,7 @@ public class Menu extends JFrame {
         menuPanelCenter.add(setLabel);
         menuPanelCenter.add(textFieldSize);
         menuPanelSouth.add(startButton);
+        menuPanelSouth.add(exitButton);
 
         //add panel to frame
         add(menuPanelNorth, BorderLayout.NORTH);
@@ -47,10 +49,12 @@ public class Menu extends JFrame {
         var helpAction = new HelpAction();
         //var startAction = new StartAction(textFieldSize.getText());
         var startAction = new StartAction();
+        var exitAction = new ExitAction();
 
         //associate action with button
         helpButton.addActionListener(helpAction);
         startButton.addActionListener(startAction);
+        exitButton.addActionListener(exitAction);
         //Int
         //startButton.addActionListener(event ->
               // new StartAction());
@@ -99,6 +103,14 @@ public class Menu extends JFrame {
 
             System.out.println("maze size " + mazeSize);
             System.out.println("maze size 2" + size);
+        }
+    }
+
+    private class ExitAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            dispose();
         }
     }
 }
