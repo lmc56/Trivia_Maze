@@ -17,6 +17,8 @@ public class Help extends JFrame {
     public Help(){
         //System.out.println("In Help");
         setSize(myWidth,myLength);
+        setTitle("Help");
+        setLocationRelativeTo(null);
 
         //create items
         var howToPlayButton = new JButton("How To Play");

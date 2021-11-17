@@ -13,19 +13,20 @@ public class Menu extends JFrame {
     private JPanel menuPanelCenterC2;
     private JTextField textFieldSize;
     private JLabel setLabel;
-    private static final int myWidth = 1920;
-    private static final int myLength = 1050;
+    private int myWidth = 1920;
+    private int myLength = 1050;
 
     public Menu(){
         setSize(myWidth,myLength);
-
+        setTitle("Movie Trivia Maze");
+        setLocationRelativeTo(null);
         //create items
         var helpButton = new JButton("Help");
-        //var textFieldSize = new JTextField();
+        var smallButton = new JButton("Make Screen Smaller");
         textFieldSize = new JTextField();
         var startButton = new JButton("Start");
         setLabel = new JLabel("", SwingConstants.CENTER);
-        setLabel.setText("Set size of Maze: ");
+        setLabel.setText("Set size of Maze from 4 to 100: ");
         var exitButton = new JButton("Quit");
         textFieldSize.setColumns(10);
         Font bigText = setLabel.getFont().deriveFont(Font.PLAIN, 30f);
@@ -33,6 +34,7 @@ public class Menu extends JFrame {
         exitButton.setFont(bigText);
         startButton.setFont(bigText);
         helpButton.setFont(bigText);
+        smallButton.setFont(bigText);
         textFieldSize.setFont(bigText);
 
         menuPanelNorth = new JPanel();
@@ -43,10 +45,10 @@ public class Menu extends JFrame {
         menuPanelCenter.setLayout(new GridBagLayout());
         //menuPanelCenterC1.setLayout(new GridLayout(3,1));
 
-        //textFieldSize.setColumns(10);
 
         //add buttons and text input
         menuPanelNorth.add(helpButton);
+        menuPanelNorth.add(smallButton);
        // menuPanelCenter.add(new JLabel("Set size of Maze: ", SwingConstants.RIGHT));
         menuPanelCenterC1.add(setLabel, SwingConstants.CENTER);
         menuPanelCenterC2.add(textFieldSize, SwingConstants.CENTER);
@@ -62,12 +64,13 @@ public class Menu extends JFrame {
 
         //create button action
         var helpAction = new HelpAction();
-        //var startAction = new StartAction(textFieldSize.getText());
+        var smallAction = new SmallAction();
         var startAction = new StartAction();
         var exitAction = new ExitAction();
 
         //associate action with button
         helpButton.addActionListener(helpAction);
+        smallButton.addActionListener(smallAction);
         startButton.addActionListener(startAction);
         exitButton.addActionListener(exitAction);
         //Int
@@ -80,8 +83,16 @@ public class Menu extends JFrame {
     }
 
     public void MenuSizeError(){
-        setLabel.setText("Error: Set size of Maze with Number: ");
+        setLabel.setText("Error: Set size of Maze with Number 4 to 100: ");
     }
+
+    public void setSizeCall(int width, int length){
+        myWidth = width;
+        myLength = length;
+        setSize(myWidth, myLength);
+        setLocationRelativeTo(null);
+    }
+
 
 
     private class HelpAction implements ActionListener {
@@ -89,6 +100,14 @@ public class Menu extends JFrame {
         @Override
         public void actionPerformed(ActionEvent event) {
             Help myHelp = new Help();
+        }
+    }
+
+    private class SmallAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            setSizeCall(800,790);
         }
     }
 
@@ -102,15 +121,20 @@ public class Menu extends JFrame {
             size = textFieldSize.getText();
             try {
                 mazeSize = Integer.parseInt(size);
-                Maze myMaze = new Maze(mazeSize,mazeSize);
+                if(mazeSize > 3 && mazeSize < 101) {
+                    Maze myMaze = new Maze(mazeSize, mazeSize);
+                }
+                else {
+                    MenuSizeError();
+                }
                 //setVisible(false);
             }
             catch(Exception ex) {
                 MenuSizeError();
             }
 
-            System.out.println("maze size " + mazeSize);
-            System.out.println("maze size 2" + size);
+            //System.out.println("maze size " + mazeSize);
+            //System.out.println("maze size 2" + size);
         }
     }
 
