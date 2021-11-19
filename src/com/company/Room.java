@@ -1,10 +1,9 @@
 package com.company;
+import javax.swing.*;
 import java.sql.*;
-import java.util.Scanner;
 
 public class Room {
 
-    Scanner in = new Scanner(System.in);
     String url = "jdbc:sqlite:C:/Users/andre/Trivia_Maze/src/com/company/new_file";
 
 
@@ -17,19 +16,25 @@ public class Room {
 
             ResultSet resultSet = statement.executeQuery("select * from QUESTIONS ORDER BY random() LIMIT 1");
             question = resultSet.getString(1);
-            answer = resultSet.getString(2);
+            answer = resultSet.getString("ANSWER");
         }
         catch(SQLException e){
             System.err.println(e.getMessage());
         }
 
+        //Code obtained from javadoc oracle
+        // (https://docs.oracle.com/javase/7/docs/api/javax/swing/JOptionPane.html)
+        Object[] possibleAnswers = { answer, "Second", "Third" };
+        Object selectedValue = JOptionPane.showInputDialog(null,
+                question, "Room",
+                JOptionPane.INFORMATION_MESSAGE, null,
+                possibleAnswers, possibleAnswers[0]);
+
         System.out.println(question);
-        System.out.println(isResult(answer));
+        System.out.println(isResult(answer,(String) selectedValue));
     }
 
-    public boolean isResult(String answer) {
-        String myAnswer = in.nextLine();
-
+    public boolean isResult(String answer,String myAnswer) {
         return myAnswer.equals(answer);
     }
 }
