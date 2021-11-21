@@ -22,7 +22,9 @@ public class Menu extends JFrame {
         setLocationRelativeTo(null);
         //create items
         var helpButton = new JButton("Help");
-        var smallButton = new JButton("Make Screen Smaller");
+        var smallButton = new JButton("Small");
+        var largeButton = new JButton("Large");
+        JLabel sizeLabel = new JLabel("Set Screen Size: ");
         textFieldSize = new JTextField();
         var startButton = new JButton("Start");
         setLabel = new JLabel("", SwingConstants.CENTER);
@@ -35,6 +37,8 @@ public class Menu extends JFrame {
         startButton.setFont(bigText);
         helpButton.setFont(bigText);
         smallButton.setFont(bigText);
+        largeButton.setFont(bigText);
+        sizeLabel.setFont(bigText);
         textFieldSize.setFont(bigText);
 
         menuPanelNorth = new JPanel();
@@ -48,7 +52,9 @@ public class Menu extends JFrame {
 
         //add buttons and text input
         menuPanelNorth.add(helpButton);
+        menuPanelNorth.add(sizeLabel);
         menuPanelNorth.add(smallButton);
+        menuPanelNorth.add(largeButton);
        // menuPanelCenter.add(new JLabel("Set size of Maze: ", SwingConstants.RIGHT));
         menuPanelCenterC1.add(setLabel, SwingConstants.CENTER);
         menuPanelCenterC2.add(textFieldSize, SwingConstants.CENTER);
@@ -65,12 +71,14 @@ public class Menu extends JFrame {
         //create button action
         var helpAction = new HelpAction();
         var smallAction = new SmallAction();
+        var largeAction = new LargeAction();
         var startAction = new StartAction();
         var exitAction = new ExitAction();
 
         //associate action with button
         helpButton.addActionListener(helpAction);
         smallButton.addActionListener(smallAction);
+        largeButton.addActionListener(largeAction);
         startButton.addActionListener(startAction);
         exitButton.addActionListener(exitAction);
         //Int
@@ -93,6 +101,25 @@ public class Menu extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    public void setCenterSmall(){
+        Font smallText = setLabel.getFont().deriveFont(Font.PLAIN, 25f);
+        setLabel.setFont(smallText);
+        textFieldSize.setColumns(5);
+    }
+
+    public void setCenterLarge(){
+        Font largeText = setLabel.getFont().deriveFont(Font.PLAIN, 30f);
+        setLabel.setFont(largeText);
+        textFieldSize.setColumns(10);
+    }
+
+    public int getWidthFrame(){
+        return myWidth;
+    }
+
+    public int getLengthFrame(){
+        return myLength;
+    }
 
 
     private class HelpAction implements ActionListener {
@@ -108,6 +135,16 @@ public class Menu extends JFrame {
         @Override
         public void actionPerformed(ActionEvent event) {
             setSizeCall(800,790);
+            setCenterSmall();
+        }
+    }
+
+    private class LargeAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            setSizeCall(1920,1050);
+            setCenterLarge();
         }
     }
 
@@ -123,6 +160,8 @@ public class Menu extends JFrame {
                 mazeSize = Integer.parseInt(size);
                 if(mazeSize > 3 && mazeSize < 101) {
                     Maze myMaze = new Maze(mazeSize, mazeSize);
+                    View myView = new View(mazeSize, getWidthFrame(), getLengthFrame());
+                    dispose();
                 }
                 else {
                     MenuSizeError();
