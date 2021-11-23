@@ -28,7 +28,7 @@ public class Menu extends JFrame {
         textFieldSize = new JTextField();
         var startButton = new JButton("Start");
         setLabel = new JLabel("", SwingConstants.CENTER);
-        setLabel.setText("Set size of Maze from 4 to 100: ");
+        setLabel.setText("Set size of Maze from 4 to 20: ");
         var exitButton = new JButton("Quit");
         textFieldSize.setColumns(10);
         Font bigText = setLabel.getFont().deriveFont(Font.PLAIN, 30f);
@@ -91,7 +91,7 @@ public class Menu extends JFrame {
     }
 
     public void MenuSizeError(){
-        setLabel.setText("Error: Set size of Maze with Number 4 to 100: ");
+        setLabel.setText("Error: Set size of Maze with Number 4 to 20: ");
     }
 
     public void setSizeCall(int width, int length){
@@ -158,10 +158,11 @@ public class Menu extends JFrame {
             size = textFieldSize.getText();
             try {
                 mazeSize = Integer.parseInt(size);
-                if(mazeSize > 3 && mazeSize < 101) {
+                if(mazeSize > 3 && mazeSize < 21) {
                     Maze myMaze = new Maze(mazeSize, mazeSize);
-                    View myView = new View(mazeSize, getWidthFrame(), getLengthFrame());
+                    myMaze.display();
                     dispose();
+                    Model myModel = new Model(mazeSize, getWidthFrame(), getLengthFrame());
                 }
                 else {
                     MenuSizeError();

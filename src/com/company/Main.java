@@ -8,8 +8,10 @@ public class Main {
 	// write your code here
         System.out.println("test");
         Menu myMenu = new Menu();
-        Room basic = new Room();
-        //maze
+        // starts rooms
+        //Room basic = new Room();
+        //maze starter from Tony
+        /*
 	    Maze maze = new Maze(4,4);
 	    maze.display();
 
@@ -20,6 +22,7 @@ public class Main {
             }
 	        System.out.println();
         }
+	    */
     }
     //0 = not visited,   1 = wall,     2 = visited,  3 = no wall,  4 = exitNode, 6 = final path
     //7 = barrier,       8 = entrance, 9 = exit.
