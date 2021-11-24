@@ -25,7 +25,7 @@ public class Help extends JFrame {
         var exitButton = new JButton("Exit");
         setLabel = new JLabel("", SwingConstants.CENTER);
         setLabel.setText("<html>Open doors to move around the maze by answering <br /> movie trivia questions " +
-                "correctly. You have three lives <br /> though so don't get more than three questions wrong!</html>");
+                "correctly. You have three lives <br /> so don't get more than three questions wrong!</html>");
 
         menuPanelNorth = new JPanel();
         menuPanelCenter = new JPanel();
@@ -60,7 +60,7 @@ public class Help extends JFrame {
     public void SetHelpHowTo(){
 
         setLabel.setText("<html>Open doors to move around the maze by answering <br /> movie trivia questions " +
-                "correctly. You have three lives <br /> though so don't get more than three questions wrong!</html>");
+                "correctly. You have three lives <br /> so don't get more than three questions wrong!</html>");
 
     }
 
