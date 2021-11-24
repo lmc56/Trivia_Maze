@@ -67,8 +67,8 @@ public class Maze {
         maze[height - 1][width - 2] = 9;
         maze[height - 2][width - 2] = 4; //exitNode
     }
-    //0 = not visited,   1 = wall,     2 = visited,  3 = no wall,  4= exitNode
-    //7 = barrier,     8 = entrance, 9 = exit,
+    //0 = not visited,   1 = wall,     2 = visited,  3 = door,  4= exitNode
+    //7 = barrier,     8 = entrance, 9 = exit, -1 = user
     private void connectNodes(Node next, Node tempNode) {
         int dx = tempNode.x - next.x;
         int dy = tempNode.y - next.y;
@@ -129,6 +129,8 @@ public class Maze {
                 stack.push(tempNode);
             }
         }
+        maze[1][1] = -1;
+        maze[height - 2][width - 2] = 4;
     }
 
     private void unvisit() {
@@ -269,14 +271,6 @@ public class Maze {
             sb.append("\n");
         }
         System.out.println(sb.toString());
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getWidth() {
-        return width;
     }
 
     public int[][] array() {
