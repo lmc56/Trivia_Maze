@@ -1,7 +1,6 @@
 package com.company;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 import java.util.Stack;
 
@@ -36,13 +35,10 @@ public class Maze {
 
         buildGraph();
         buildMaze();
-        display();
-
-        solveMaze();
-        display();
+        unvisit();
     }
 
-    public void buildGraph() {
+    private void buildGraph() {
         maze = new int[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -94,7 +90,7 @@ public class Maze {
         }
     }
 
-    public void buildMaze() {
+    private void buildMaze() {
         stack.push(new Node(1,1));
         path.add(new Node(1,1));
         boolean solved = false;
@@ -131,12 +127,22 @@ public class Maze {
                             }
                 }
                 stack.push(tempNode);
-                display();
             }
         }
     }
 
-    public void solveMaze() {
+    private void unvisit() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (maze[i][j] == 2) {
+                    maze[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    /*
+    private void solveMaze() {
         System.out.println("Solving Maze... ");
         maze[height - 2][width - 2] = 4; //exitNode
 
@@ -171,7 +177,7 @@ public class Maze {
         } else return false;
     }
 
-    public boolean solveMazeRecursive(int maze[][], int x, int y, int sol[][]) {
+    private boolean solveMazeRecursive(int maze[][], int x, int y, int sol[][]) {
         if(x == width - 2 && y == height - 2 && maze[y][x] == 4) {
             sol[x][y] = 6;
             return true;
@@ -197,6 +203,8 @@ public class Maze {
         }
         return false;
     }
+     */
+
     //find neighbor method
     private ArrayList<Node> findNeighbors(Node node) {
         ArrayList<Node> neighbors = new ArrayList<>();
@@ -261,5 +269,17 @@ public class Maze {
             sb.append("\n");
         }
         System.out.println(sb.toString());
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int[][] array() {
+        return maze;
     }
 }
