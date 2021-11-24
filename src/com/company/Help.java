@@ -15,7 +15,6 @@ public class Help extends JFrame {
     private static final int myWidth = 500;
     private static final int myLength = 300;
     public Help(){
-        //System.out.println("In Help");
         setSize(myWidth,myLength);
         setTitle("Help");
         setLocationRelativeTo(null);
@@ -25,7 +24,8 @@ public class Help extends JFrame {
         var controlsButton = new JButton("Controls");
         var exitButton = new JButton("Exit");
         setLabel = new JLabel("", SwingConstants.CENTER);
-        setLabel.setText("Type How to play here.");
+        setLabel.setText("<html>Open doors to move around the maze by answering <br /> movie trivia questions " +
+                "correctly. You have three lives <br /> though so don't get more than three questions wrong!</html>");
 
         menuPanelNorth = new JPanel();
         menuPanelCenter = new JPanel();
@@ -59,16 +59,16 @@ public class Help extends JFrame {
 
     public void SetHelpHowTo(){
 
-        setLabel.setText("Type How to play here.");
+        setLabel.setText("<html>Open doors to move around the maze by answering <br /> movie trivia questions " +
+                "correctly. You have three lives <br /> though so don't get more than three questions wrong!</html>");
 
     }
 
     public void SetHelpControls(){
 
-        setLabel.setText("Type the final controls here.");
+        setLabel.setText("Use the arrow keys to move left, right, up, and down around the maze.");
 
     }
-
 
     private class HowToAction implements ActionListener {
 

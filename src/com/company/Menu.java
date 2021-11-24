@@ -20,6 +20,7 @@ public class Menu extends JFrame {
         setSize(myWidth,myLength);
         setTitle("Movie Trivia Maze");
         setLocationRelativeTo(null);
+
         //create items
         var helpButton = new JButton("Help");
         var smallButton = new JButton("Small");
@@ -47,15 +48,12 @@ public class Menu extends JFrame {
         menuPanelCenterC2 = new JPanel();
         menuPanelSouth = new JPanel();
         menuPanelCenter.setLayout(new GridBagLayout());
-        //menuPanelCenterC1.setLayout(new GridLayout(3,1));
-
 
         //add buttons and text input
         menuPanelNorth.add(helpButton);
         menuPanelNorth.add(sizeLabel);
         menuPanelNorth.add(smallButton);
         menuPanelNorth.add(largeButton);
-       // menuPanelCenter.add(new JLabel("Set size of Maze: ", SwingConstants.RIGHT));
         menuPanelCenterC1.add(setLabel, SwingConstants.CENTER);
         menuPanelCenterC2.add(textFieldSize, SwingConstants.CENTER);
         menuPanelCenter.add(menuPanelCenterC1, new GridBagConstraints());
@@ -81,13 +79,8 @@ public class Menu extends JFrame {
         largeButton.addActionListener(largeAction);
         startButton.addActionListener(startAction);
         exitButton.addActionListener(exitAction);
-        //Int
-        //startButton.addActionListener(event ->
-              // new StartAction());
-        //startButton.addActionListener(startAction);
 
         setVisible(true);
-
     }
 
     public void MenuSizeError(){
@@ -121,7 +114,6 @@ public class Menu extends JFrame {
         return myLength;
     }
 
-
     private class HelpAction implements ActionListener {
 
         @Override
@@ -149,7 +141,6 @@ public class Menu extends JFrame {
     }
 
     private class StartAction implements ActionListener {
-
         private int mazeSize;
         private String size;
 
@@ -167,14 +158,10 @@ public class Menu extends JFrame {
                 else {
                     MenuSizeError();
                 }
-                //setVisible(false);
             }
             catch(Exception ex) {
                 MenuSizeError();
             }
-
-            //System.out.println("maze size " + mazeSize);
-            //System.out.println("maze size 2" + size);
         }
     }
 

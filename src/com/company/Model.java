@@ -7,6 +7,6 @@ public class Model {
         //start view
         View myView = new View(mazeSize, width, length);
         //start room
-        Room basic = new Room();
+        Door basic = new Door();
     }
 }
