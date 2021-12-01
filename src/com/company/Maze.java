@@ -1,10 +1,16 @@
 package com.company;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-public class Maze {
+public class Maze implements ActionListener{
+
+
 
     private class Node{
         public int x;
@@ -28,15 +34,61 @@ public class Maze {
     private Stack<Node> chosen = new Stack<>();
     private ArrayList<Node> path = new ArrayList<>();
     private Node lastNode;
+    private JButton buttons[];
+    JButton help;
+    JButton exit;
 
     public Maze(int height, int width) {
         this.width = width * 2 + 1;
         this.height = height * 2 + 1;
+        this.buttons = new JButton[height * width];
 
         buildGraph();
         buildMaze();
         unvisit();
+
+        JFrame maze = new JFrame();
+        maze.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel rooms = new JPanel();
+        JPanel layout = new JPanel();
+        JPanel select = new JPanel();
+        rooms.setLayout(new GridLayout(height,width));
+        for(int i = 0;i < (height * width);i++){
+            JButton myRoom = new JButton();
+            myRoom.addActionListener(this);
+            buttons[i] = myRoom;
+            rooms.add(myRoom);
+        }
+        rooms.setPreferredSize(new Dimension(500, 400));
+        help = new JButton("Help");
+        exit = new JButton("Exit");
+        select.add(help);
+        select.add(exit);
+        help.addActionListener(this);
+        exit.addActionListener(this);
+        layout.add(rooms);
+
+        maze.getContentPane().add(layout);
+        maze.getContentPane().add(select, BorderLayout.EAST);
+        maze.pack();
+        maze.setVisible(true);
+
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        for(JButton c : buttons){
+            if(e.getSource() == c){
+                Door myDoor = new Door();
+            }
+
+            if (e.getSource() == exit){
+                System.exit(0);
+            }
+        }
+
+    }
+
 
     private void buildGraph() {
         maze = new int[height][width];
@@ -139,6 +191,11 @@ public class Maze {
                 }
             }
         }
+    }
+
+    void displayMaze(){
+        JPanel mazeView = new JPanel();
+        mazeView.setLayout(new GridLayout(height, width));
     }
 
     /*
