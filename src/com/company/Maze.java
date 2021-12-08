@@ -1,10 +1,16 @@
 package com.company;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-public class Maze {
+public class Maze implements ActionListener{
+
+
 
     private class Node{
         public int myX;
@@ -20,21 +26,53 @@ public class Maze {
             this.myY = node.myY;
         }
     }
-    private int myHeight;
-    private int myWidth;
-    private int[][] myMaze;
-    private Random myRand = new Random();
-    private Stack<Node> myStack = new Stack<>();
-    private ArrayList<Node> myPath = new ArrayList<>();
-
-    public Maze(int height1, int width1) {
-        myWidth = width1 * 2 + 1;
-        myHeight = height1 * 2 + 1;
 
         buildGraph();
         buildMaze();
         unvisit();
+
+        JFrame maze = new JFrame();
+        maze.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel rooms = new JPanel();
+        JPanel layout = new JPanel();
+        JPanel select = new JPanel();
+        rooms.setLayout(new GridLayout(height,width));
+        for(int i = 0;i < (height * width);i++){
+            JButton myRoom = new JButton();
+            myRoom.addActionListener(this);
+            buttons[i] = myRoom;
+            rooms.add(myRoom);
+        }
+        rooms.setPreferredSize(new Dimension(500, 400));
+        help = new JButton("Help");
+        exit = new JButton("Exit");
+        select.add(help);
+        select.add(exit);
+        help.addActionListener(this);
+        exit.addActionListener(this);
+        layout.add(rooms);
+
+        maze.getContentPane().add(layout);
+        maze.getContentPane().add(select, BorderLayout.EAST);
+        maze.pack();
+        maze.setVisible(true);
+
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        for(JButton c : buttons){
+            if(e.getSource() == c){
+                Door myDoor = new Door();
+            }
+
+            if (e.getSource() == exit){
+                System.exit(0);
+            }
+        }
+
+    }
+
 
     private void buildGraph() {
         myMaze = new int[myHeight][myWidth];
@@ -133,10 +171,6 @@ public class Maze {
     }
 
     private void unvisit() {
-        for (int i = 0; i < myHeight; i++) {
-            for (int j = 0; j < myWidth; j++) {
-                if (myMaze[i][j] == 2) {
-                    myMaze[i][j] = 0;
                 }
             }
         }

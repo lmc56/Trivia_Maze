@@ -20,11 +20,13 @@ public class View extends JFrame {
         setLocationRelativeTo(null);
 
         //create items
+        var helpButton = new JButton("Help");
         var exitButton = new JButton("Quit");
         var saveButton = new JButton("Save Not Working");
         JLabel fontLabel = new JLabel("Font");
 
         Font bigText = fontLabel.getFont().deriveFont(Font.PLAIN, 30f);
+        helpButton.setFont(bigText);
         exitButton.setFont(bigText);
         saveButton.setFont(bigText);
 
@@ -34,6 +36,7 @@ public class View extends JFrame {
 
 
         //add buttons and text input
+        viewPanelNorth.add(helpButton);
         viewPanelSouth.add(exitButton);
         viewPanelSouth.add(saveButton);
 
@@ -43,15 +46,25 @@ public class View extends JFrame {
         add(viewPanelSouth, BorderLayout.SOUTH);
 
         //create button action
+        var helpAction = new View.HelpAction();
         var exitAction = new View.ExitAction();
         var saveAction = new View.SaveAction();
 
         //associate action with button
+        helpButton.addActionListener(helpAction);
         exitButton.addActionListener(exitAction);
         saveButton.addActionListener(saveAction);
 
         setVisible(true);
 
+    }
+
+    private class HelpAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            Help myHelp = new Help();
+        }
     }
 
     private class SaveAction implements ActionListener {

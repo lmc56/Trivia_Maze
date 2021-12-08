@@ -3,16 +3,7 @@ package com.company;
 public class Main {
 
     public static void main(String[] args) {
-       // Maze pract = new Maze(4, 4);
-        //System.out.println("hello");
-	// write your code here
-        System.out.println("test");
-        Menu myMenu = new Menu();
-        Room basic = new Room();
-        //maze
-	    Maze maze = new Maze(4,4);
-	    maze.display();
-
+      Menu mymenu = new Menu();
 	    int[][] testArray = maze.array();
 	    for (int i = 0; i < testArray.length; i++) {
 	        for (int j = 0; j < testArray[0].length; j++) {
