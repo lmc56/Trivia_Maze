@@ -1,9 +1,12 @@
 package com.company;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
@@ -34,7 +37,7 @@ public class Maze implements ActionListener{
     private Stack<Node> chosen = new Stack<>();
     private ArrayList<Node> path = new ArrayList<>();
     private Node lastNode;
-    private JButton buttons[];
+    JButton buttons[];
     JButton help;
     JButton exit;
 
@@ -54,9 +57,22 @@ public class Maze implements ActionListener{
         JPanel select = new JPanel();
         rooms.setLayout(new GridLayout(height,width));
         for(int i = 0;i < (height * width);i++){
-            JButton myRoom = new JButton();
-            myRoom.addActionListener(this);
-            buttons[i] = myRoom;
+//            JButton myRoom = new JButton();
+//            myRoom.addActionListener(this);
+//            buttons[i] = myRoom;
+
+            //Room myRoom = new Room();
+            JPanel myRoom = new JPanel(new FlowLayout());
+            JButton leftBtn = new JButton();
+            JButton rightBtn = new JButton();
+            JButton topBtn = new JButton();
+            JButton botBtn = new JButton();
+            leftBtn.addActionListener(this);
+            rightBtn.addActionListener(this);
+            topBtn.addActionListener(this);
+            botBtn.addActionListener(this);
+            myRoom.add(leftBtn);
+            buttons[i] = leftBtn;
             rooms.add(myRoom);
         }
         rooms.setPreferredSize(new Dimension(500, 400));
@@ -77,14 +93,14 @@ public class Maze implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        for(JButton c : buttons){
-            if(e.getSource() == c){
+        for (JButton x : buttons){
+            if(e.getSource() == x){
                 Door myDoor = new Door();
             }
+        }
 
-            if (e.getSource() == exit){
+        if (e.getSource() == exit){
                 System.exit(0);
-            }
         }
 
     }
