@@ -1,36 +1,36 @@
 package com.company;
 
 public class Movement {
-    private int x;
-    private int y;
-    private int ux;
-    private int uy;
-    private int doorX;
-    private int doorY;
-    private int postUX;
-    private int postUY;
-    private int[][] maze;
-    private int columns;
-    private int rows;
-    private boolean userFound;
+    private int myX;
+    private int myY;
+    private int myUX;
+    private int myUY;
+    private int myDoorX;
+    private int myDoorY;
+    private int myPostUX;
+    private int myPostUY;
+    private int[][] myMaze;
+    private int myColumns;
+    private int myRows;
+    private boolean myUserFound;
     private boolean canMove;
-    private boolean locked;
+    private boolean myLocked;
 
-    public Movement(int x, int y, int[][] maze) throws Exception {
-        userFound = false;
-        this.x = x;
-        this.y = y;
-        this.ux = 0;
-        this.uy = 0;
-        this.doorX = ux + x;
-        this.doorY = uy + y;
-        this.postUX = 0;
-        this.postUY = 0;
-        this.maze = maze;
-        columns = maze.length;
-        rows = maze[0].length;
-        userFound = findUser();
-        if (userFound && (x == 0 || y == 0)) {
+    public Movement(int x1, int y1, int[][] maze1) throws Exception {
+        myX = x1;
+        myY = y1;
+        myUX = 0;
+        myUY = 0;
+        myPostUX = 0;
+        myPostUY = 0;
+        myMaze = maze1;
+        myColumns = myMaze.length;
+        myRows = myMaze[0].length;
+        myUserFound = findUser();
+
+        if ((myUserFound) && (myX == 0 || myY == 0)) {
+            myDoorX = myUX + myX;
+            myDoorY = myUX + myY;
             canMove = setCanMove();
             if (!canMove) {
                 throw new Exception("Novement has failed.");
@@ -41,26 +41,26 @@ public class Movement {
     }
 
     public boolean isLocked() {
-        return locked;
+        return myLocked;
     }
 
     public int[][] array() {
-        maze[uy][ux] = 2;
-        maze[doorY][doorX] = -3;
-        maze[postUY][postUX] = -1;
-        return maze;
+        myMaze[myUY][myUX] = 2;
+        myMaze[myDoorY][myDoorX] = -3;
+        myMaze[myPostUY][myPostUX] = -1;
+        return myMaze;
     }
 
     private boolean setCanMove() {
-        if (maze[doorY][doorX] == 3 || maze[doorY][doorX] == -3) { //if the spot intending to move is a door, move person
-            if (x != 0) {
-                postUX = doorX + x;
+        if (myMaze[myDoorY][myDoorX] == 3 || myMaze[myDoorY][myDoorX] == -3) { //if the spot intending to move is a door, move person
+            if (myX != 0) {
+                myPostUX = myDoorX + myX;
             }
-            if (y != 0) {
-                postUY = doorY + y;
+            if (myY != 0) {
+                myPostUY = myDoorY + myY;
             }
-            if (maze[doorY][doorX] == 3) {
-                locked = true;
+            if (myMaze[myDoorY][myDoorX] == 3) {
+                myLocked = true;
             }
             return true;
         }
@@ -69,17 +69,17 @@ public class Movement {
 
 
     private boolean findUser() { //if spot = user, record spot and return true, else false
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < rows; j++) {
-                if (maze[i][j] == -1) {
-                    uy = i;
-                    ux = j;
-                    userFound = true;
+        for (int i = 0; i < myColumns; i++) {
+            for (int j = 0; j < myRows; j++) {
+                if (myMaze[i][j] == -1) {
+                    myUY = i;
+                    myUX = j;
+                    myUserFound = true;
                     return true;
                 }
             }
         }
-    userFound = false;
+    myUserFound = false;
     return false;
     }
 }

@@ -7,31 +7,29 @@ import java.util.Stack;
 public class Maze {
 
     private class Node{
-        public int x;
-        public int y;
+        public int myX;
+        public int myY;
 
-        public Node(int x, int y) {
-            this.x = x;
-            this.y = y;
+        public Node(int x1, int y1) {
+            this.myX = x1;
+            this.myY = y1;
         }
 
         public Node(Node node) {
-            this.x = node.x;
-            this.y = node.y;
+            this.myX = node.myX;
+            this.myY = node.myY;
         }
     }
-    private int height;
-    private int width;
-    private int[][] maze;
-    private Random rand = new Random();
-    private Stack<Node> stack = new Stack<>();
-    private Stack<Node> chosen = new Stack<>();
-    private ArrayList<Node> path = new ArrayList<>();
-    private Node lastNode;
+    private int myHeight;
+    private int myWidth;
+    private int[][] myMaze;
+    private Random myRand = new Random();
+    private Stack<Node> myStack = new Stack<>();
+    private ArrayList<Node> myPath = new ArrayList<>();
 
-    public Maze(int height, int width) {
-        this.width = width * 2 + 1;
-        this.height = height * 2 + 1;
+    public Maze(int height1, int width1) {
+        myWidth = width1 * 2 + 1;
+        myHeight = height1 * 2 + 1;
 
         buildGraph();
         buildMaze();
@@ -39,217 +37,153 @@ public class Maze {
     }
 
     private void buildGraph() {
-        maze = new int[height][width];
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                maze[i][j] = 0;
+        myMaze = new int[myHeight][myWidth];
+        for (int i = 0; i < myHeight; i++) {
+            for (int j = 0; j < myWidth; j++) {
+                myMaze[i][j] = 0;
             }
         }
-        for (int i = 0; i < width; i++) {
-            maze[0][i] = 7;
-            maze[height - 1][i] = 7;
+        for (int i = 0; i < myWidth; i++) {
+            myMaze[0][i] = 7;
+            myMaze[myHeight - 1][i] = 7;
         }
 
-        for (int i = 1; i < height - 1; i++) {
-            for (int j = 0; j < width; j++) {
+        for (int i = 1; i < myHeight - 1; i++) {
+            for (int j = 0; j < myWidth; j++) {
                 if (j % 2 == 0) {
-                    maze[i][j] = 1;
-                }
-                if (i % 2 == 0) {
-                    maze[i][j] = 1;
-                }
-                if (j == 0 || j == width-1) {
-                    maze[i][j] = 7;
+                    myMaze[i][j] = 1;
+                }else if (i % 2 == 0) {
+                    myMaze[i][j] = 1;
+                }else if (j == 0 || j == myWidth-1) {
+                    myMaze[i][j] = 7;
                 }
             }
         }
-        maze[0][1] = 8;
-        maze[height - 1][width - 2] = 9;
-        maze[height - 2][width - 2] = 4; //exitNode
+        myMaze[0][1] = 8;
+        myMaze[myHeight - 1][myWidth - 2] = 9;
+        myMaze[myHeight - 2][myWidth - 2] = 4; //exitNode
     }
     //0 = not visited,   1 = wall,     2 = visited,  3 = door,  4= exitNode
     //7 = barrier,     8 = entrance, 9 = exit, -1 = user
-    private void connectNodes(Node next, Node tempNode) {
-        int dx = tempNode.x - next.x;
-        int dy = tempNode.y - next.y;
+    private void connectNodes(Node next1, Node tempNode1) { //used in build maze
+        Node next = next1;
+        Node tempNode = tempNode1;
+
+        int dx = tempNode.myX - next.myX;
+        int dy = tempNode.myY - next.myY;
         if(dy != 0) {
             if(dy > 0) {
-                maze[next.y + 1][next.x] = 3;
+                myMaze[next.myY + 1][next.myX] = 3;
             }
             if(dy < 0) {
-                maze[next.y - 1][next.x] = 3;
+                myMaze[next.myY - 1][next.myX] = 3;
             }
         }
         if(dx != 0) {
             if(dx > 0) {
-                maze[next.y][next.x + 1] = 3;
+                myMaze[next.myY][next.myX + 1] = 3;
             }
             if(dx < 0) {
-                maze[next.y][next.x - 1] = 3;
+                myMaze[next.myY][next.myX - 1] = 3;
             }
         }
     }
 
     private void buildMaze() {
-        stack.push(new Node(1,1));
-        path.add(new Node(1,1));
+        myStack.push(new Node(1,1));
+        myPath.add(new Node(1,1));
         boolean solved = false;
-        while (!stack.empty()) {
-            Node next = stack.pop();
+        while (!myStack.empty()) {
+            Node next = myStack.pop();
 
-            if (maze[next.y][next.x] == 4) {
+            if (myMaze[next.myY][next.myX] == 4) {
                 solved = true;
-                path.add(next);
+                myPath.add(next);
             }
             if (solved == false) {
-                path.add(next);
+                myPath.add(next);
             }
 
-            if (maze[next.y][next.x] != 4) {
-                maze[next.y][next.x] = 2;
+            if (myMaze[next.myY][next.myX] != 4) {
+                myMaze[next.myY][next.myX] = 2;
             }
             if (hasNeighbors(next)) {
 
                 ArrayList<Node> neighbors = findNeighbors(next);
-                int randomSelection = rand.nextInt(neighbors.size());
+                int randomSelection = myRand.nextInt(neighbors.size());
 
                 Node tempNode = new Node(neighbors.remove(randomSelection)); //x=1,y=3
                 connectNodes(next, tempNode);
 
                 while(!neighbors.isEmpty()) {
-                    randomSelection = rand.nextInt(neighbors.size());
+                    randomSelection = myRand.nextInt(neighbors.size());
                     Node stackNode = neighbors.remove(randomSelection);
-                            if (!(maze[stackNode.y][stackNode.x] == 2) || !(maze[stackNode.y][stackNode.x] == 4)) {
-                                stack.push(stackNode);
+                            if (!(myMaze[stackNode.myY][stackNode.myX] == 2) || !(myMaze[stackNode.myY][stackNode.myX] == 4)) {
+                                myStack.push(stackNode);
 
-                                maze[stackNode.y][stackNode.x] = 2;
+                                myMaze[stackNode.myY][stackNode.myX] = 2;
                                 connectNodes(next,stackNode);
                             }
                 }
-                stack.push(tempNode);
+                myStack.push(tempNode);
             }
         }
-        maze[1][1] = -1;
-        maze[height - 2][width - 2] = 4;
+        myMaze[1][1] = -1;
+        myMaze[myHeight - 2][myWidth - 2] = 4;
     }
 
     private void unvisit() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (maze[i][j] == 2) {
-                    maze[i][j] = 0;
+        for (int i = 0; i < myHeight; i++) {
+            for (int j = 0; j < myWidth; j++) {
+                if (myMaze[i][j] == 2) {
+                    myMaze[i][j] = 0;
                 }
             }
         }
     }
-
-    /*
-    private void solveMaze() {
-        System.out.println("Solving Maze... ");
-        maze[height - 2][width - 2] = 4; //exitNode
-
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (maze[i][j] == 2) {
-                    maze[i][j] = 0;
-                }
-            }
-        }
-
-        int sol[][] = new int[height][width];
-        if(solveMazeRecursive(maze, 1, 1, sol) == false) {
-            System.out.println("solution does not exist");
-            return;
-        }
-
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-
-                if(sol[i][j] == 6) {
-                    maze[i][j] = 6;
-                }
-            }
-        }
-
-    }
-
-    private boolean isSafe(int maze[][], int y, int x) {
-        if ((maze[y][x] == 0) || (maze[y][x] == 3)) {
-            return true;
-        } else return false;
-    }
-
-    private boolean solveMazeRecursive(int maze[][], int x, int y, int sol[][]) {
-        if(x == width - 2 && y == height - 2 && maze[y][x] == 4) {
-            sol[x][y] = 6;
-            return true;
-        }
-        if (isSafe(maze, x, y) == true) {
-            if (sol[x][y] == 6) {
-                return false;
-            }
-
-            sol[x][y] = 6;
-
-            if (solveMazeRecursive(maze, x + 1, y, sol))
-                return true;
-            if (solveMazeRecursive(maze, x, y + 1, sol))
-                return true;
-            if (solveMazeRecursive(maze, x - 1, y, sol))
-                return true;
-            if (solveMazeRecursive(maze, x, y - 1, sol))
-                return true;
-
-            sol[x][y] = 0;
-            return false;
-        }
-        return false;
-    }
-     */
-
     //find neighbor method
     private ArrayList<Node> findNeighbors(Node node) {
         ArrayList<Node> neighbors = new ArrayList<>();
-        if(maze[node.y][node.x - 1] == 1 || maze[node.y][node.x - 1] == 3) { //left check
-            if (maze[node.y][node.x - 2] == 0 || maze[node.y][node.x - 2] == 4) {
-                neighbors.add(new Node(node.x - 2, node.y));
+        if(myMaze[node.myY][node.myX - 1] == 1 || myMaze[node.myY][node.myX - 1] == 3) { //left check
+            if (myMaze[node.myY][node.myX - 2] == 0 || myMaze[node.myY][node.myX - 2] == 4) {
+                neighbors.add(new Node(node.myX - 2, node.myY));
             }
-        } if(maze[node.y][node.x + 1] == 1 || maze[node.y][node.x + 1] == 3) { //right check
-            if (maze[node.y][node.x + 2] == 0 || maze[node.y][node.x + 2] == 4) {
-                neighbors.add(new Node(node.x + 2, node.y));
+        } if(myMaze[node.myY][node.myX + 1] == 1 || myMaze[node.myY][node.myX + 1] == 3) { //right check
+            if (myMaze[node.myY][node.myX + 2] == 0 || myMaze[node.myY][node.myX + 2] == 4) {
+                neighbors.add(new Node(node.myX + 2, node.myY));
             }
-        } if(maze[node.y + 1][node.x] == 1 || maze[node.y + 1][node.x] == 3) { //bottom check
-            if (maze[node.y + 2][node.x] == 0 || maze[node.y + 2][node.x] == 4) {
-                neighbors.add(new Node(node.x, node.y + 2));
+        } if(myMaze[node.myY + 1][node.myX] == 1 || myMaze[node.myY + 1][node.myX] == 3) { //bottom check
+            if (myMaze[node.myY + 2][node.myX] == 0 || myMaze[node.myY + 2][node.myX] == 4) {
+                neighbors.add(new Node(node.myX, node.myY + 2));
             }
 
-        } if(maze[node.y - 1][node.x] == 1 || maze[node.y - 1][node.x] == 3) { //top check
-            if (maze[node.y - 2][node.x] == 0 || maze[node.y - 2][node.x] == 4) {
-                neighbors.add(new Node(node.x, node.y - 2));
+        } if(myMaze[node.myY - 1][node.myX] == 1 || myMaze[node.myY - 1][node.myX] == 3) { //top check
+            if (myMaze[node.myY - 2][node.myX] == 0 || myMaze[node.myY - 2][node.myX] == 4) {
+                neighbors.add(new Node(node.myX, node.myY - 2));
             }
         }
         return neighbors;
     }
     //checks if it has neighbors
-    private boolean hasNeighbors(Node node) {
+    private boolean hasNeighbors(Node node1) {
         int neighbors = 0;
-        if(maze[node.y][node.x - 1] == 1 || maze[node.y][node.x - 1] == 3) { //left check
-            if (maze[node.y][node.x - 2] == 0 || maze[node.y][node.x - 2] == 4) {
+        if(myMaze[node1.myY][node1.myX - 1] == 1 || myMaze[node1.myY][node1.myX - 1] == 3) { //left check
+            if (myMaze[node1.myY][node1.myX - 2] == 0 || myMaze[node1.myY][node1.myX - 2] == 4) {
                 neighbors++;
             }
 
-        } if(maze[node.y][node.x + 1] == 1 || maze[node.y][node.x + 1] == 3) { //right check
-            if (maze[node.y][node.x + 2] == 0 || maze[node.y][node.x + 2] == 4) {
+        } if(myMaze[node1.myY][node1.myX + 1] == 1 || myMaze[node1.myY][node1.myX + 1] == 3) { //right check
+            if (myMaze[node1.myY][node1.myX + 2] == 0 || myMaze[node1.myY][node1.myX + 2] == 4) {
                 neighbors++;
             }
 
-        } if(maze[node.y + 1][node.x] == 1 || maze[node.y + 1][node.x] == 3) { //top check
-            if (maze[node.y + 2][node.x] == 0) {
+        } if(myMaze[node1.myY + 1][node1.myX] == 1 || myMaze[node1.myY + 1][node1.myX] == 3) { //top check
+            if (myMaze[node1.myY + 2][node1.myX] == 0) {
                 neighbors++;
             }
 
-        } if(maze[node.y - 1][node.x] == 1 || maze[node.y - 1][node.x] == 3) { //bottom check
-            if (maze[node.y - 2][node.x] == 0 || maze[node.y - 2][node.x] == 4) {
+        } if(myMaze[node1.myY - 1][node1.myX] == 1 || myMaze[node1.myY - 1][node1.myX] == 3) { //bottom check
+            if (myMaze[node1.myY - 2][node1.myX] == 0 || myMaze[node1.myY - 2][node1.myX] == 4) {
                 neighbors++;
             }
         }
@@ -259,13 +193,13 @@ public class Maze {
     //7 = barrier,       8 = entrance, 9 = exit
     public void display() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                sb.append(maze[i][j] == 1 ? "*" : maze[i][j] == 7 ? "#"
-                        : maze[i][j] == 0 || maze[i][j] == 8 || maze[i][j] == 9 || maze[i][j] == 3 ? " "
-                        : maze[i][j] == 2 ? "" +
+        for (int i = 0; i < myHeight; i++) {
+            for (int j = 0; j < myWidth; j++) {
+                sb.append(myMaze[i][j] == 1 ? "*" : myMaze[i][j] == 7 ? "#"
+                        : myMaze[i][j] == 0 || myMaze[i][j] == 8 || myMaze[i][j] == 9 || myMaze[i][j] == 3 ? " "
+                        : myMaze[i][j] == 2 ? "" +
                         "X"
-                        : maze[i][j] == 6 ? "." : maze[i][j]);
+                        : myMaze[i][j] == 6 ? "." : myMaze[i][j]);
                 sb.append("  ");
             }
             sb.append("\n");
@@ -274,6 +208,6 @@ public class Maze {
     }
 
     public int[][] array() {
-        return maze;
+        return myMaze;
     }
 }
