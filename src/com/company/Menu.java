@@ -1,22 +1,29 @@
 package com.company;
 
+import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Menu extends JFrame {
-    private JPanel menuPanelNorth;
-    private JPanel menuPanelSouth;
-    private JPanel menuPanelCenter;
-    private JPanel menuPanelCenterC1;
-    private JPanel menuPanelCenterC2;
-    private JTextField textFieldSize;
-    private JLabel setLabel;
-    private int myWidth = 1920;
-    private int myLength = 1050;
+public class Menu extends JFrame implements java.io.Serializable{
+    private JPanel myMenuPanelNorth;
+    private JPanel myMenuPanelSouth;
+    private JPanel myMenuPanelCenter;
+    private JPanel myMenuPanelCenterC1;
+    private JPanel myMenuPanelCenterC2;
+    private JTextField myTextFieldSize;
+    private JLabel mySetLabel;
+    private int myWidth;
+    private int myLength;
+    private final Menu THIS_CLASS = this;
+    private boolean myIsLoad = false;
 
     public Menu(){
+        if(!myIsLoad) {
+            myWidth = 1920;
+            myLength = 1050;
+        }
         setSize(myWidth,myLength);
         setTitle("Movie Trivia Maze");
         setLocationRelativeTo(null);
@@ -26,51 +33,59 @@ public class Menu extends JFrame {
         var smallButton = new JButton("Small");
         var largeButton = new JButton("Large");
         JLabel sizeLabel = new JLabel("Set Screen Size: ");
-        textFieldSize = new JTextField();
+        myTextFieldSize = new JTextField();
         var startButton = new JButton("Start");
-        setLabel = new JLabel("", SwingConstants.CENTER);
-        setLabel.setText("Set size of Maze with a Number from 4 to 20: ");
+        mySetLabel = new JLabel("", SwingConstants.CENTER);
+        mySetLabel.setText("Set size of Maze with a Number from 4 to 20: ");
+        var saveButton = new JButton("Save");
+        var loadButton = new JButton("Load");
         var exitButton = new JButton("Quit");
-        textFieldSize.setColumns(10);
-        Font bigText = setLabel.getFont().deriveFont(Font.PLAIN, 30f);
-        setLabel.setFont(bigText);
+        myTextFieldSize.setColumns(10);
+        Font bigText = mySetLabel.getFont().deriveFont(Font.PLAIN, 30f);
+        mySetLabel.setFont(bigText);
+        saveButton.setFont(bigText);
+        loadButton.setFont(bigText);
         exitButton.setFont(bigText);
         startButton.setFont(bigText);
         helpButton.setFont(bigText);
         smallButton.setFont(bigText);
         largeButton.setFont(bigText);
         sizeLabel.setFont(bigText);
-        textFieldSize.setFont(bigText);
+        myTextFieldSize.setFont(bigText);
 
-        menuPanelNorth = new JPanel();
-        menuPanelCenter = new JPanel();
-        menuPanelCenterC1 = new JPanel();
-        menuPanelCenterC2 = new JPanel();
-        menuPanelSouth = new JPanel();
-        menuPanelCenter.setLayout(new GridBagLayout());
+        myMenuPanelNorth = new JPanel();
+        myMenuPanelCenter = new JPanel();
+        myMenuPanelCenterC1 = new JPanel();
+        myMenuPanelCenterC2 = new JPanel();
+        myMenuPanelSouth = new JPanel();
+        myMenuPanelCenter.setLayout(new GridBagLayout());
 
         //add buttons and text input
-        menuPanelNorth.add(helpButton);
-        menuPanelNorth.add(sizeLabel);
-        menuPanelNorth.add(smallButton);
-        menuPanelNorth.add(largeButton);
-        menuPanelCenterC1.add(setLabel, SwingConstants.CENTER);
-        menuPanelCenterC2.add(textFieldSize, SwingConstants.CENTER);
-        menuPanelCenter.add(menuPanelCenterC1, new GridBagConstraints());
-        menuPanelCenter.add(menuPanelCenterC2, new GridBagConstraints());
-        menuPanelSouth.add(startButton);
-        menuPanelSouth.add(exitButton);
+        myMenuPanelNorth.add(helpButton);
+        myMenuPanelNorth.add(sizeLabel);
+        myMenuPanelNorth.add(smallButton);
+        myMenuPanelNorth.add(largeButton);
+        myMenuPanelCenterC1.add(mySetLabel, SwingConstants.CENTER);
+        myMenuPanelCenterC2.add(myTextFieldSize, SwingConstants.CENTER);
+        myMenuPanelCenter.add(myMenuPanelCenterC1, new GridBagConstraints());
+        myMenuPanelCenter.add(myMenuPanelCenterC2, new GridBagConstraints());
+        myMenuPanelSouth.add(startButton);
+        myMenuPanelSouth.add(saveButton);
+        myMenuPanelSouth.add(loadButton);
+        myMenuPanelSouth.add(exitButton);
 
         //add panel to frame
-        add(menuPanelNorth, BorderLayout.NORTH);
-        add(menuPanelCenter, BorderLayout.CENTER);
-        add(menuPanelSouth, BorderLayout.SOUTH);
+        add(myMenuPanelNorth, BorderLayout.NORTH);
+        add(myMenuPanelCenter, BorderLayout.CENTER);
+        add(myMenuPanelSouth, BorderLayout.SOUTH);
 
         //create button action
         var helpAction = new HelpAction();
         var smallAction = new SmallAction();
         var largeAction = new LargeAction();
         var startAction = new StartAction();
+        var saveAction = new SaveAction();
+        var loadAction = new LoadAction();
         var exitAction = new ExitAction();
 
         //associate action with button
@@ -78,13 +93,16 @@ public class Menu extends JFrame {
         smallButton.addActionListener(smallAction);
         largeButton.addActionListener(largeAction);
         startButton.addActionListener(startAction);
+        saveButton.addActionListener(saveAction);
+        loadButton.addActionListener(loadAction);
         exitButton.addActionListener(exitAction);
 
         setVisible(true);
     }
 
-    public void MenuSizeError(){
-        setLabel.setText("Error: Set size of Maze with a Number from 4 to 20: ");
+
+    public void menuSizeError(){
+        mySetLabel.setText("Error: Set size of Maze with a Number from 4 to 20: ");
     }
 
     public void setSizeCall(int width, int length){
@@ -95,15 +113,15 @@ public class Menu extends JFrame {
     }
 
     public void setCenterSmall(){
-        Font smallText = setLabel.getFont().deriveFont(Font.PLAIN, 25f);
-        setLabel.setFont(smallText);
-        textFieldSize.setColumns(5);
+        Font smallText = mySetLabel.getFont().deriveFont(Font.PLAIN, 25f);
+        mySetLabel.setFont(smallText);
+        myTextFieldSize.setColumns(5);
     }
 
     public void setCenterLarge(){
-        Font largeText = setLabel.getFont().deriveFont(Font.PLAIN, 30f);
-        setLabel.setFont(largeText);
-        textFieldSize.setColumns(10);
+        Font largeText = mySetLabel.getFont().deriveFont(Font.PLAIN, 30f);
+        mySetLabel.setFont(largeText);
+        myTextFieldSize.setColumns(10);
     }
 
     public int getWidthFrame(){
@@ -114,7 +132,12 @@ public class Menu extends JFrame {
         return myLength;
     }
 
-    private class HelpAction implements ActionListener {
+    public Menu getMyClass(){
+        myIsLoad = true;
+        return THIS_CLASS;
+    }
+
+    private class HelpAction implements ActionListener, Serializable {
 
         @Override
         public void actionPerformed(ActionEvent event) {
@@ -122,7 +145,7 @@ public class Menu extends JFrame {
         }
     }
 
-    private class SmallAction implements ActionListener {
+    private class SmallAction implements ActionListener, Serializable {
 
         @Override
         public void actionPerformed(ActionEvent event) {
@@ -131,7 +154,7 @@ public class Menu extends JFrame {
         }
     }
 
-    private class LargeAction implements ActionListener {
+    private class LargeAction implements ActionListener, Serializable {
 
         @Override
         public void actionPerformed(ActionEvent event) {
@@ -140,32 +163,88 @@ public class Menu extends JFrame {
         }
     }
 
-    private class StartAction implements ActionListener {
-        private int mazeSize;
-        private String size;
+    private class StartAction implements ActionListener, Serializable {
+        private int myMazeSize;
+        private String mySize;
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            size = textFieldSize.getText();
+            mySize = myTextFieldSize.getText();
             try {
-                mazeSize = Integer.parseInt(size);
-                if(mazeSize > 3 && mazeSize < 21) {
-                    Maze myMaze = new Maze(mazeSize, mazeSize);
+                myMazeSize = Integer.parseInt(mySize);
+                if(myMazeSize > 3 && myMazeSize < 21) {
+                    Maze myMaze = new Maze(myMazeSize, myMazeSize);
                     myMaze.display();
                     dispose();
-                    Model myModel = new Model(mazeSize, getWidthFrame(), getLengthFrame());
+                    Model myModel = new Model(myMazeSize, getWidthFrame(), getLengthFrame());
                 }
                 else {
-                    MenuSizeError();
+                    menuSizeError();
                 }
             }
             catch(Exception ex) {
-                MenuSizeError();
+                menuSizeError();
             }
         }
     }
 
-    private class ExitAction implements ActionListener {
+    private class SaveAction implements ActionListener, Serializable {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            /*
+            Menu myClass = getMyClass();
+            System.out.println(myClass.myWidth);
+            System.out.println(myClass.myLength);
+            try {
+                FileOutputStream fileOut = new FileOutputStream("D:/tcss 360/git_repos/Trivia_Maze/src/com/company/game.ser");
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(myClass);
+                out.close();
+                fileOut.close();
+                System.out.println("Serialized data is saved in game.ser");
+            }
+            catch (IOException i) {
+                i.printStackTrace();
+            }
+
+             */
+        }
+    }
+
+    private class LoadAction implements ActionListener, Serializable {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            /*
+            Menu newMenu;
+            try {
+                dispose();
+                FileInputStream fileIn = new FileInputStream("D:/tcss 360/git_repos/Trivia_Maze/src/com/company/game.ser");
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+                newMenu = (Menu) in.readObject();
+                //System.out.println(newMenu.myWidth);
+                in.close();
+                fileIn.close();
+                System.out.println("loaded");
+                setVisible(true);
+            } catch (IOException i) {
+                i.printStackTrace();
+                return;
+            } catch (ClassNotFoundException c) {
+                System.out.println("No Game found");
+                c.printStackTrace();
+                return;
+            }
+            */
+
+
+        }
+
+
+    }
+
+    private class ExitAction implements ActionListener, Serializable {
 
         @Override
         public void actionPerformed(ActionEvent event) {

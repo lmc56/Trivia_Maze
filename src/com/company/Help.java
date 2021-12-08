@@ -7,15 +7,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Help extends JFrame {
-    private JPanel menuPanelNorth;
-    private JPanel menuPanelSouth;
-    private JPanel menuPanelCenter;
-    private JLabel setLabel;
+    private JPanel myMenuPanelNorth;
+    private JPanel myMenuPanelSouth;
+    private JPanel myMenuPanelCenter;
+    private JLabel mySetLabel;
 
-    private static final int myWidth = 500;
-    private static final int myLength = 300;
+    private static final int WIDTH = 500;
+    private static final int LENGTH = 300;
     public Help(){
-        setSize(myWidth,myLength);
+        setSize(WIDTH,LENGTH);
         setTitle("Help");
         setLocationRelativeTo(null);
 
@@ -23,25 +23,25 @@ public class Help extends JFrame {
         var howToPlayButton = new JButton("How To Play");
         var controlsButton = new JButton("Controls");
         var exitButton = new JButton("Exit");
-        setLabel = new JLabel("", SwingConstants.CENTER);
-        setLabel.setText("<html>Open doors to move around the maze by answering <br /> movie trivia questions " +
+        mySetLabel = new JLabel("", SwingConstants.CENTER);
+        mySetLabel.setText("<html>Open doors to move around the maze by answering <br /> movie trivia questions " +
                 "correctly. You have three lives <br /> so don't get more than three questions wrong!</html>");
 
-        menuPanelNorth = new JPanel();
-        menuPanelCenter = new JPanel();
-        menuPanelSouth = new JPanel();
-        menuPanelCenter.setLayout(new GridLayout(1,0));
+        myMenuPanelNorth = new JPanel();
+        myMenuPanelCenter = new JPanel();
+        myMenuPanelSouth = new JPanel();
+        myMenuPanelCenter.setLayout(new GridLayout(1,0));
 
         //add buttons and text input
-        menuPanelNorth.add(howToPlayButton);
-        menuPanelNorth.add(controlsButton);
-        menuPanelCenter.add(setLabel);
-        menuPanelSouth.add(exitButton);
+        myMenuPanelNorth.add(howToPlayButton);
+        myMenuPanelNorth.add(controlsButton);
+        myMenuPanelCenter.add(mySetLabel);
+        myMenuPanelSouth.add(exitButton);
 
         //add panel to frame
-        add(menuPanelNorth, BorderLayout.NORTH);
-        add(menuPanelCenter, BorderLayout.CENTER);
-        add(menuPanelSouth, BorderLayout.SOUTH);
+        add(myMenuPanelNorth, BorderLayout.NORTH);
+        add(myMenuPanelCenter, BorderLayout.CENTER);
+        add(myMenuPanelSouth, BorderLayout.SOUTH);
 
         //create button action
         var howToAction = new HowToAction();
@@ -57,16 +57,16 @@ public class Help extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    public void SetHelpHowTo(){
+    public void setHelpHowTo(){
 
-        setLabel.setText("<html>Open doors to move around the maze by answering <br /> movie trivia questions " +
+        mySetLabel.setText("<html>Open doors to move around the maze by answering <br /> movie trivia questions " +
                 "correctly. You have three lives <br /> so don't get more than three questions wrong!</html>");
 
     }
 
-    public void SetHelpControls(){
+    public void setHelpControls(){
 
-        setLabel.setText("Use the arrow keys to move left, right, up, and down around the maze.");
+        mySetLabel.setText("Use the arrow keys to move left, right, up, and down around the maze.");
 
     }
 
@@ -74,7 +74,7 @@ public class Help extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            SetHelpHowTo();
+            setHelpHowTo();
         }
     }
 
@@ -82,7 +82,7 @@ public class Help extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            SetHelpControls();
+            setHelpControls();
         }
     }
 
