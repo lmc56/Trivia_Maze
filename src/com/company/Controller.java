@@ -1,9 +1,12 @@
 package com.company;
 
 public class Controller {
+    private Model myModel;
+    private View myView;
 
-    public Controller(){
-
+    public Controller(Model theModel, View theView){
+        this.myModel = theModel;
+        this.myView = theView;
     }
 
     public void move(int theDirection, int [][] theMaze) {
@@ -32,12 +35,15 @@ public class Controller {
         //model call for deserialization
     }
 
-    public void getMaze(){
+    public int[][] getMaze(){
+        int [][] maze = new int[0][];
         //movement.array();
+        return maze;
     }
 
-    public void checkLock(){
+    public boolean checkLock(){
         //movement.isLocked();
+        return false;
     }
 
     public void getQuestion(int [][] theMaze){
