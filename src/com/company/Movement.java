@@ -21,8 +21,7 @@ public class Movement {
         myY = y1;
         myUX = 0;
         myUY = 0;
-        myPostUX = 0;
-        myPostUY = 0;
+
         myMaze = maze1;
         myColumns = myMaze.length;
         myRows = myMaze[0].length;
@@ -31,6 +30,8 @@ public class Movement {
         if ((myUserFound) && (myX == 0 || myY == 0)) {
             myDoorX = myUX + myX;
             myDoorY = myUX + myY;
+            myPostUX = myUX;
+            myPostUY = myUY;
             canMove = setCanMove();
             if (!canMove) {
                 throw new Exception("Novement has failed.");
