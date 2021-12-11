@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.Stack;
 
 public class Maze implements ActionListener{
+<<<<<<< HEAD
     private final int USER = -1;
     private final int UNVISITED = 0;
     private final int WALL = 1;
@@ -19,6 +20,10 @@ public class Maze implements ActionListener{
     private final int BARRIER = 7;
     private final int ENTRANCE = 8;
     private final int EXIT = 9;
+=======
+
+
+>>>>>>> 3c79006820bb4d84c589d8ec6cc9877f78b5767c
 
     private class Node{
         public int myX;
@@ -34,6 +39,7 @@ public class Maze implements ActionListener{
             this.myY = node.myY;
         }
     }
+<<<<<<< HEAD
     private int myHeight;
     private int myWidth;
     private int[][] myMaze;
@@ -48,6 +54,8 @@ public class Maze implements ActionListener{
         this.myWidth = width1 * 2 + 1;
         this.myHeight = height1 * 2 + 1;
         this.buttons = new JButton[height1 * width1];
+=======
+>>>>>>> 3c79006820bb4d84c589d8ec6cc9877f78b5767c
 
         buildGraph();
         buildMaze();
@@ -58,6 +66,7 @@ public class Maze implements ActionListener{
         JPanel rooms = new JPanel();
         JPanel layout = new JPanel();
         JPanel select = new JPanel();
+<<<<<<< HEAD
         rooms.setLayout(new GridLayout(height1,width1));
         for(int i = 0;i < (height1 * width1);i++){
 //            JButton myRoom = new JButton();
@@ -76,6 +85,13 @@ public class Maze implements ActionListener{
             botBtn.addActionListener(this);
             myRoom.add(leftBtn);
             buttons[i] = leftBtn;
+=======
+        rooms.setLayout(new GridLayout(height,width));
+        for(int i = 0;i < (height * width);i++){
+            JButton myRoom = new JButton();
+            myRoom.addActionListener(this);
+            buttons[i] = myRoom;
+>>>>>>> 3c79006820bb4d84c589d8ec6cc9877f78b5767c
             rooms.add(myRoom);
         }
         rooms.setPreferredSize(new Dimension(500, 400));
@@ -96,6 +112,7 @@ public class Maze implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
         for (JButton x : buttons){
             if(e.getSource() == x){
                 Door myDoor = new Door();
@@ -104,9 +121,20 @@ public class Maze implements ActionListener{
 
         if (e.getSource() == exit){
             System.exit(0);
+=======
+        for(JButton c : buttons){
+            if(e.getSource() == c){
+                Door myDoor = new Door();
+            }
+
+            if (e.getSource() == exit){
+                System.exit(0);
+            }
+>>>>>>> 3c79006820bb4d84c589d8ec6cc9877f78b5767c
         }
 
     }
+
 
     private void buildGraph() {
         myMaze = new int[myHeight][myWidth];
@@ -204,10 +232,13 @@ public class Maze implements ActionListener{
     }
 
     private void unvisit() {
+<<<<<<< HEAD
         for (int i = 0; i < myHeight; i++) {
             for (int j = 0; j < myWidth; j++) {
                 if (myMaze[i][j] == VISITED) {
                     myMaze[i][j] = UNVISITED;
+=======
+>>>>>>> 3c79006820bb4d84c589d8ec6cc9877f78b5767c
                 }
             }
         }

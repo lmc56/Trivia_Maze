@@ -3,6 +3,7 @@ package com.company;
 public class Main {
 
     public static void main(String[] args) {
+<<<<<<< HEAD
 		// Maze pract = new Maze(4, 4);
 		//System.out.println("hello");
 		// write your code here
@@ -37,6 +38,16 @@ public class Main {
         Room basic = new Room();
         //maze
 
+=======
+      Menu mymenu = new Menu();
+	    int[][] testArray = maze.array();
+	    for (int i = 0; i < testArray.length; i++) {
+	        for (int j = 0; j < testArray[0].length; j++) {
+	            System.out.print(testArray[i][j] + " ");
+            }
+	        System.out.println();
+        }
+>>>>>>> 3c79006820bb4d84c589d8ec6cc9877f78b5767c
 
 		Movement move;
 		try {
