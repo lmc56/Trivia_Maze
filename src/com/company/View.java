@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class View extends JFrame {
     private JPanel viewPanelNorth;
@@ -57,6 +58,27 @@ public class View extends JFrame {
 
         setVisible(true);
 
+    }
+
+    public void viewRoom(){
+        String question;
+        String answer;
+        String a1;
+        String a2;
+
+        //Code obtained from javadoc oracle
+        // (https://docs.oracle.com/javase/7/docs/api/javax/swing/JOptionPane.html)
+        Object[] possibleAnswers = getAnswerSet(new String[]{answer, a1, a2}, answer);
+        Random text = new Random();
+        int n = text.nextInt(possibleAnswers.length - 1);
+
+        Object selectedValue = JOptionPane.showInputDialog(null,
+                question, "Room",
+                JOptionPane.INFORMATION_MESSAGE, null,
+                possibleAnswers, possibleAnswers[n]);
+
+        System.out.println(question);
+        System.out.println(isResult(answer,(String) selectedValue));
     }
 
     private class HelpAction implements ActionListener {
