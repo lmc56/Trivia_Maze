@@ -10,16 +10,15 @@ import java.util.Random;
 public class Door {
 
     String url = "jdbc:sqlite:C:/Users/andre/Trivia_Maze/src/com/company/new_file";
-
+    String question;
+    String answer;
+    String a1;
+    String a2;
 
     public Door(){
-        String question = "";
-        String answer = "";
-        String a1 = "";
-        String a2 = "";
 
         try{
-            Connection con = DriverManager.getConnection(url);
+            Connection con = DriverManager.getConnection("jdbc:sqlite:identifier.sqlite");
             Statement statement = con.createStatement();
 
             ResultSet resultSet = statement.executeQuery("select * from QUESTIONS ORDER BY random() LIMIT 1");
@@ -35,25 +34,33 @@ public class Door {
 
         //Code obtained from javadoc oracle
         // (https://docs.oracle.com/javase/7/docs/api/javax/swing/JOptionPane.html)
-        Object[] possibleAnswers = getAnswerSet(new String[]{answer, a1, a2}, answer);
-        Random text = new Random();
-        int n = text.nextInt(possibleAnswers.length - 1);
-
-        Object selectedValue = JOptionPane.showInputDialog(null,
-                question, "Room",
-                JOptionPane.INFORMATION_MESSAGE, null,
-                possibleAnswers, possibleAnswers[n]);
-
-        System.out.println(question);
-        System.out.println(isResult(answer,(String) selectedValue));
+//        Object[] possibleAnswers = getAnswerSet(new String[]{answer, a1, a2}, answer);
+//        Random text = new Random();
+//        int n = text.nextInt(possibleAnswers.length - 1);
+//
+//        Object selectedValue = JOptionPane.showInputDialog(null,
+//                question, "Room",
+//                JOptionPane.INFORMATION_MESSAGE, null,
+//                possibleAnswers, possibleAnswers[n]);
+//
+//        System.out.println(question);
+//        System.out.println(isResult(answer,(String) selectedValue));
     }
 
+    public String getQuestion(){
+        return question;
+    }
+
+    public String getAnswer(){
+        return answer;
+    }
     public boolean isResult(String answer,String myAnswer) {
         return myAnswer.equals(answer);
     }
 
-    public Object[] getAnswerSet(String[] ans, String a){
-        if (a.equals("T") || a.equals("F")){
+    public Object[] getAnswerSet(){
+        String[] ans = new String[]{answer, a1, a2};
+        if (answer.equals("T") || answer.equals("F")){
             ans = new String[]{"T", "F"};
             return ans;
         }

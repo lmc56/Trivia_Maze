@@ -5,7 +5,9 @@ public class Main {
     public static void main(String[] args) {
 
 
-       Maze pract = new Maze(4, 4);
+       View v = new View(5, 5);
+       Maze pract = new Maze(5, 5);
+       pract.display();
         //System.out.println("hello");
     }
 }
