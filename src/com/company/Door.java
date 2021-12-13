@@ -18,7 +18,7 @@ public class Door {
     public Door(){
 
         try{
-            Connection con = DriverManager.getConnection("jdbc:sqlite:identifier.sqlite");
+            Connection con = DriverManager.getConnection("jdbc:sqlite:src/com/company/new_file");
             Statement statement = con.createStatement();
 
             ResultSet resultSet = statement.executeQuery("select * from QUESTIONS ORDER BY random() LIMIT 1");
@@ -54,11 +54,17 @@ public class Door {
     public String getAnswer(){
         return answer;
     }
+    public String getA1(){
+        return a1;
+    }
+    public String getA2(){
+        return a2;
+    }
     public boolean isResult(String answer,String myAnswer) {
         return myAnswer.equals(answer);
     }
 
-    public Object[] getAnswerSet(){
+    public Object[] getAnswerSet(String answer, String a1, String a2){
         String[] ans = new String[]{answer, a1, a2};
         if (answer.equals("T") || answer.equals("F")){
             ans = new String[]{"T", "F"};

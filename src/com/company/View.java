@@ -4,130 +4,47 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.jar.JarEntry;
 
-public class View extends JFrame implements ActionListener{
+public class View extends JFrame implements ActionListener, Observer {
+
     private JPanel viewPanelNorth;
     private JPanel viewPanelSouth;
     private JPanel viewPanelCenter;
     private int myWidth;
     private int myLength;
     Door myDoor = new Door();
-    JButton doorKnob = new JButton();
+
+    int fullDisplay[][];
+    boolean cheatMode = false;
+    JPanel rooms;
+    JPanel layout = new JPanel();
+    JPanel select = new JPanel();
 
     public View(int height, int width) {
-//        myWidth = width;
-//        myLength = length;
-//        setSize(myWidth,myLength);
-//        setTitle("Movie Trivia Maze");
-//        setLocationRelativeTo(null);
-//
-//        //create items
-//        var helpButton = new JButton("Help");
-//        var exitButton = new JButton("Quit");
-//        var saveButton = new JButton("Save Not Working");
-//        JLabel fontLabel = new JLabel("Font");
-//
-//        Font bigText = fontLabel.getFont().deriveFont(Font.PLAIN, 30f);
-//        helpButton.setFont(bigText);
-//        exitButton.setFont(bigText);
-//        saveButton.setFont(bigText);
-//
-//        viewPanelNorth = new JPanel();
-//        viewPanelCenter = new JPanel();
-//        viewPanelSouth = new JPanel();
-//
-//
-//        //add buttons and text input
-//        viewPanelNorth.add(helpButton);
-//        viewPanelSouth.add(exitButton);
-//        viewPanelSouth.add(saveButton);
-//
-//        //add panel to frame
-//        add(viewPanelNorth, BorderLayout.NORTH);
-//        add(viewPanelCenter, BorderLayout.CENTER);
-//        add(viewPanelSouth, BorderLayout.SOUTH);
-//
-//        //create button action
-//        var helpAction = new View.HelpAction();
-//        var exitAction = new View.ExitAction();
-//        var saveAction = new View.SaveAction();
-//
-//        //associate action with button
-//        helpButton.addActionListener(helpAction);
-//        exitButton.addActionListener(exitAction);
-//        saveButton.addActionListener(saveAction);
-//
-//        this.getContentPane().add(viewPanelCenter);
-//        this.getContentPane().add(viewPanelNorth);
-//        this.getContentPane().add(viewPanelCenter);
-        Maze myMaze = new Maze(4, 4);
-        int myUY = 0;
-        int myUX = 0;
-        int buttons[][] = myMaze.array();
-        int userDisplay[][] = new int[3][3];
-        for (int i = 0; i < buttons.length; i++) {
-            for (int j = 0; j < buttons.length; j++) {
-                if (buttons[i][j] == -1) {
-                    myUY = i;
-                    myUX = j;
-                }
-            }
-        }
-        for (int i = 0; i < userDisplay.length; i++) {
-            for (int j = 0; j < userDisplay.length; j++) {
-                userDisplay[i][j] = buttons[myUX-1+i][myUY-1+j];
-            }
-        }
 
+        Maze myMaze = new Maze(height, width);
 
-        JPanel rooms = new JPanel();
-        JPanel layout = new JPanel();
-        JPanel select = new JPanel();
-        rooms.setLayout(new GridLayout(3, 3));
-        for(int[] r : userDisplay){
-//            JButton myRoom = new JButton();
-//            myRoom.addActionListener(this);
-//            buttons[i] = myRoom;
+        fullDisplay = myMaze.array();
+        rooms = userView(fullDisplay);
 
-            //Room myRoom = new Room();
-            for (int c : r) {
-                JPanel myRoom = new JPanel(new FlowLayout());
-                //JButton doorKnob = new JButton();
-                doorKnob.addActionListener(this);
-                if (c == 7 || c == 1){
-                    myRoom.setBackground(Color.BLACK);
-                }
-                else if(c == 8 || c == 9 || c == 0){
-                    myRoom.setBackground(Color.WHITE);
-                }
-                else if (c == 3){
-                    myRoom.setBackground(Color.red);
-                    myRoom.add(doorKnob);
-                }
-                else if (c == -1){
-                    myRoom.setBackground(Color.yellow);
-                }
-                else{
-                    myRoom.setBackground(Color.BLUE);
-                }
-                JButton leftBtn = new JButton();
-//            leftBtn.addActionListener(this);
-//            rightBtn.addActionListener(this);
-//            topBtn.addActionListener(this);
-//            botBtn.addActionListener(this);
-//            myRoom.add(leftBtn);
-//            buttons[i] = leftBtn;
-                rooms.add(myRoom);
-            }
-        }
-        rooms.setPreferredSize(new Dimension(500, 400));
         JButton help = new JButton("Help");
+        help.setActionCommand("help");
+        help.addActionListener(this);
         JButton exit = new JButton("Exit");
+        exit.setActionCommand("exit");
+        exit.addActionListener(this);
+        JButton cheatBtn = new JButton("Cheat Mode");
+        cheatBtn.setActionCommand("cheat");
+        cheatBtn.addActionListener(this);
         select.add(help);
         select.add(exit);
-//        help.addActionListener(this);
-//        exit.addActionListener(this);
+        select.add(cheatBtn);
         layout.add(rooms);
 
         this.getContentPane().add(layout);
@@ -135,8 +52,98 @@ public class View extends JFrame implements ActionListener{
 
         this.pack();
         setVisible(true);
-
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
+
+
+    public JPanel userView(int[][] maze){
+        int myUY = 0;
+        int myUX = 0;
+
+        int userDisplay[][] = new int[3][3];
+        for (int i = 0; i < maze.length; i++) {
+            for (int j = 0; j < maze.length; j++) {
+                System.out.print(maze[i][j]);
+                if (maze[i][j] == -1) {
+                    myUY = j;
+                    myUX = i;
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                System.out.print(maze[myUX-1+i][myUY-1+j]);
+                userDisplay[i][j] = maze[myUX-1+i][myUY-1+j];
+            }
+            System.out.println();
+        }
+        System.out.println();
+        JPanel rooms = new JPanel();
+        rooms.setLayout(new GridLayout(userDisplay.length, userDisplay.length));
+        for(int i = 0; i < userDisplay.length; i++){
+
+            for (int j = 0; j < userDisplay.length; j++) {
+                JPanel myRoom = new JPanel(new GridBagLayout());
+                int c = userDisplay[i][j];
+
+                if (c == 7 || c == 1){
+                    myRoom.setBackground(Color.BLACK);
+                }
+                else if(c == 8 || c == 9 || c == 0){
+                    myRoom.setBackground(Color.WHITE);
+                    if (c == 9) {
+                        JButton exitKnob = new JButton("exit to win");
+                        exitKnob.setActionCommand("win");
+                        if (j-1 != 0) {
+                            exitKnob.setPreferredSize(new Dimension(50,300));
+                        }else {
+                            exitKnob.setPreferredSize(new Dimension(300,50));
+                        }
+                        exitKnob.addActionListener(this);
+                        myRoom.add(exitKnob);
+                    }
+                }
+                else if (c == 3){
+                    myRoom.setBackground(Color.red);
+                    JButton doorKnobTemp = new JButton();
+                    doorKnobTemp.setActionCommand((j-1)+" "+(i-1));
+                    if (j-1 != 0) {
+                        doorKnobTemp.setPreferredSize(new Dimension(50,300));
+                    }else {
+                        doorKnobTemp.setPreferredSize(new Dimension(300,50));
+                    }
+
+                    doorKnobTemp.addActionListener(this);
+                    myRoom.add(doorKnobTemp, SwingConstants.CENTER);
+                } else if (c == -3) {
+                    myRoom.setBackground(Color.green);
+                    JButton doorKnobTemp = new JButton();
+                    doorKnobTemp.setActionCommand((j-1)+" "+(i-1));
+                    if (j-1 != 0) {
+                        doorKnobTemp.setPreferredSize(new Dimension(50,300));
+                    }else {
+                        doorKnobTemp.setPreferredSize(new Dimension(300,50));
+                    }
+                    doorKnobTemp.addActionListener(this);
+                    myRoom.add(doorKnobTemp);
+                }
+                else if (c == -1){
+                    myRoom.setBackground(Color.yellow);
+                }
+                else{
+                    myRoom.setBackground(Color.BLUE);
+                }
+
+                rooms.add(myRoom);
+            }
+        }
+        rooms.setPreferredSize(new Dimension(600, 600));
+        setLocationRelativeTo(null);
+        return rooms;
+    }
+
 
     public void viewRoom(){
         String question;
@@ -159,11 +166,19 @@ public class View extends JFrame implements ActionListener{
 //        System.out.println(isResult(answer,(String) selectedValue));
     }
 
-    public void displayRoom(){
+    public boolean displayRoom(){
         Door myDoor = new Door();
         String question = myDoor.getQuestion();
-        String answer = myDoor.getAnswer();
-        Object[] possibleAnswers = myDoor.getAnswerSet();
+        String a1 = myDoor.getA1();
+        String a2 = myDoor.getA2();
+        String answer = "";
+        if (cheatMode == true) {
+            answer = "<html><font color=\"red\">" + myDoor.getAnswer() + "</font></html>";
+        }
+        else {
+            answer = myDoor.getAnswer();
+        }
+        Object[] possibleAnswers = myDoor.getAnswerSet(answer, a1, a2);
         Random text = new Random();
         int n = text.nextInt(possibleAnswers.length - 1);
 
@@ -174,6 +189,7 @@ public class View extends JFrame implements ActionListener{
 
         System.out.println(question);
         System.out.println(myDoor.isResult(answer,(String) selectedValue));
+        return myDoor.isResult(answer, (String) selectedValue);
     }
 
     /**
@@ -183,12 +199,99 @@ public class View extends JFrame implements ActionListener{
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == doorKnob){
-            displayRoom();
+        if (e.getActionCommand() == "win") {
+            dispose();
+            JFrame newJFrame = new JFrame();
+            JPanel newJPanel = new JPanel();
+            JButton newJButton = new JButton("New game");
+            var newGame = new NewGame();
+            newJButton.addActionListener(newGame);
+
+            JLabel newJLabel = new JLabel("You've won.");
+            newJPanel.add(newJButton);
+            newJPanel.add(newJLabel);
+            newJFrame.getContentPane().add(newJPanel);
+            newJFrame.pack();
+            newJFrame.setSize(500, 300);
+            newJFrame.setLocationRelativeTo(null);
+            newJFrame.setVisible(true);
+            newJFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            return;
+        } else if(e.getActionCommand() == "help") {
+            Help myHelp = new Help();
+            return;
+        } else if (e.getActionCommand() == "exit") {
+            dispose();
+            return;
+        }
+        else if (e.getActionCommand() == "cheat"){
+            if(cheatMode == false){
+                cheatMode = true;
+                return;
+            }
+            else {
+                cheatMode = false;
+                return;
+            }
+        }
+
+        String coordinates = e.getActionCommand();
+        Scanner sc = new Scanner(coordinates);
+
+        int x = sc.nextInt();
+        int y = sc.nextInt();
+
+        this.setVisible(false);
+        try {
+            Movement move = new Movement(x, y, fullDisplay);
+            if (move.isLocked()) {
+                //provide question
+                //if question is answered correctly do this
+                if (displayRoom()) {
+                    fullDisplay = move.array();
+                    JPanel updatedView = userView(move.array());
+                    this.remove(layout);
+                    layout = new JPanel();
+                    layout.add(updatedView);
+                    this.getContentPane().add(layout);
+                    this.setVisible(true);
+                    //if question is answered incorrectly, just display the answer is wrong.
+                    return;
+                }
+                else{
+                    JFrame wrong = new JFrame();
+                    wrong.setLocationRelativeTo(null);
+                    JPanel wrongP = new JPanel();
+                    wrongP.setPreferredSize(new Dimension(400, 100));
+                    JLabel wrongL = new JLabel("Wrong Answer");
+                    wrongP.add(wrongL);
+                    wrong.getContentPane().add(wrongP);
+                    wrong.pack();
+                    this.setVisible(true);
+                    wrong.setVisible(true);
+                    return;
+                }
+            } else if (!move.isLocked()) {
+                fullDisplay = move.array();
+                JPanel updatedView = userView(move.array());
+                this.remove(layout);
+                layout = new JPanel();
+                layout.add(updatedView);
+                this.getContentPane().add(layout);
+                this.setVisible(true);
+                return;
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
-    private class HelpAction implements ActionListener {
+    @Override
+    public void update(Observable o, Object arg) {
+
+    }
+
+    private class HelpAction implements ActionListener, Serializable {
 
         @Override
         public void actionPerformed(ActionEvent event) {
@@ -196,7 +299,7 @@ public class View extends JFrame implements ActionListener{
         }
     }
 
-    private class SaveAction implements ActionListener {
+    private class SaveAction implements ActionListener, Serializable {
 
         @Override
         public void actionPerformed(ActionEvent event) {
@@ -204,11 +307,13 @@ public class View extends JFrame implements ActionListener{
         }
     }
 
-    private class ExitAction implements ActionListener {
+    private class NewGame implements ActionListener, Serializable {
 
         @Override
         public void actionPerformed(ActionEvent event) {
             dispose();
+            Menu myMenu = new Menu();
+
         }
     }
 }
